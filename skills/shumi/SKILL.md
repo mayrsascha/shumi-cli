@@ -2,7 +2,7 @@
 name: shumi
 description: "Crypto trade intelligence powered by AI. Use when the user asks about crypto markets, coin analysis, price trends, market sentiment, funding rates, delta-neutral strategies, narratives, category breakdowns, or any crypto trading question. Requires Node.js 18+."
 license: MIT
-allowed-tools: Bash(shumi *) Bash(npx shumi *)
+allowed-tools: Bash(shumi *) Bash(npx --yes shumi *) Bash(npx shumi *)
 ---
 
 # Shumi — Crypto Trade Intelligence
@@ -18,8 +18,8 @@ Shumi is an AI-powered crypto analysis engine. It classifies queries, fetches re
 - Pipe output with `|`
 - Wrap in subshells `$(...)` or backticks
 
-Correct: `shumi sentiment --coin BTC`
-Fallback (if not globally installed): `npx --yes shumi sentiment --coin BTC`
+Correct: `npx --yes shumi sentiment --coin BTC`
+Also correct (if globally installed): `shumi sentiment --coin BTC`
 Wrong: `cd /some/path && npx --yes shumi sentiment --coin BTC 2>/dev/null`
 
 ## Setup
