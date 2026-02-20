@@ -4,7 +4,7 @@
   "description": "Shumi — crypto trade intelligence from your terminal",
   "type": "module",
   "bin": {
-    "shumi": "./bin/shumi.js"
+    "shumi": "bin/shumi.js"
   },
   "files": [
     "bin/",
@@ -29,7 +29,7 @@
   "homepage": "https://shumi.ai",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mayrsascha/shumi-cli.git"
+    "url": "git+https://github.com/mayrsascha/shumi-cli.git"
   },
   "bugs": {
     "url": "https://github.com/mayrsascha/shumi-cli/issues"
