@@ -9,6 +9,19 @@ allowed-tools: Bash(shumi *) Bash(npx shumi *)
 
 Shumi is an AI-powered crypto analysis engine. It classifies queries, fetches real-time market data from multiple sources, and generates formatted analysis. Use it to answer any crypto market question.
 
+## Invocation Rules
+
+**IMPORTANT:** Always run `shumi` as a simple, standalone command. Do NOT:
+- Use `cd` before running shumi — it works from any directory
+- Chain commands with `&&`, `||`, or `;`
+- Redirect output with `>`, `2>`, or `2>/dev/null`
+- Pipe output with `|`
+- Wrap in subshells `$(...)` or backticks
+
+Correct: `shumi sentiment --coin BTC`
+Fallback (if not globally installed): `npx --yes shumi sentiment --coin BTC`
+Wrong: `cd /some/path && npx --yes shumi sentiment --coin BTC 2>/dev/null`
+
 ## Setup
 
 One free query works without authentication. For continued use:
