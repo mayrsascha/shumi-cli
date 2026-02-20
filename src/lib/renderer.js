@@ -15,11 +15,3 @@ export function renderText(text) {
 export function renderRaw(data) {
   console.log(JSON.stringify(data, null, 2));
 }
-
-export function renderError(error) {
-  if (error.status === 401 || error.status === 403) {
-    console.error(chalk.yellow(error.message));
-  } else {
-    console.error(chalk.red(`Error: ${error.message}`));
-  }
-}

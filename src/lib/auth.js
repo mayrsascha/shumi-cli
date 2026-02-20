@@ -13,12 +13,27 @@ export async function login() {
   const state = nanoid();
 
   return new Promise((resolve, reject) => {
+    let settled = false;
+    let timeoutId;
+
+    function cleanup() {
+      settled = true;
+      clearTimeout(timeoutId);
+      server.close();
+    }
+
     const server = createServer((req, res) => {
       const url = new URL(req.url, `http://localhost`);
 
       if (url.pathname !== '/callback') {
         res.writeHead(404);
         res.end('Not found');
+        return;
+      }
+
+      if (settled) {
+        res.writeHead(400);
+        res.end('Authentication already completed.');
         return;
       }
 
@@ -30,16 +45,16 @@ export async function login() {
       if (callbackState !== state) {
         res.writeHead(400);
         res.end('Invalid state parameter. Authentication failed.');
+        cleanup();
         reject(new Error('State mismatch — possible CSRF attempt'));
-        server.close();
         return;
       }
 
       if (!token || !wallet) {
         res.writeHead(400);
         res.end('Missing token or wallet. Authentication failed.');
+        cleanup();
         reject(new Error('Missing token or wallet in callback'));
-        server.close();
         return;
       }
 
@@ -57,7 +72,7 @@ export async function login() {
         </html>
       `);
 
-      server.close();
+      cleanup();
       resolve({ walletAddress: wallet });
     });
 
@@ -69,9 +84,11 @@ export async function login() {
     });
 
     // Timeout after 2 minutes
-    setTimeout(() => {
-      server.close();
-      reject(new Error('Authentication timed out. Please try again.'));
+    timeoutId = setTimeout(() => {
+      if (!settled) {
+        cleanup();
+        reject(new Error('Authentication timed out. Please try again.'));
+      }
     }, 120000);
   });
 }

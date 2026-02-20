@@ -32,14 +32,17 @@ export async function query({ messages, raw = false, archetype = 'base', command
     method: 'POST',
     headers,
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(300000),
   });
 
   if (!response.ok) {
+    // Read body once as text, then try to parse as JSON
+    const text = await response.text();
     let errorBody;
     try {
-      errorBody = await response.json();
+      errorBody = JSON.parse(text);
     } catch {
-      errorBody = { error: await response.text() };
+      errorBody = { error: text || `Request failed: ${response.status}` };
     }
 
     if (response.status === 401) {
@@ -60,11 +63,15 @@ export async function query({ messages, raw = false, archetype = 'base', command
 
 export async function healthCheck() {
   try {
-    const response = await fetch(`${API_URL.replace('/api/cli', '')}/api/health`, {
-      method: 'GET',
+    // Check if the CLI endpoint is reachable with a minimal request
+    // A 400 (bad request) still means the server is up
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
       signal: AbortSignal.timeout(10000),
     });
-    return { ok: response.ok, status: response.status };
+    return { ok: response.status < 500, status: response.status };
   } catch (error) {
     return { ok: false, status: 0, error: error.message };
   }

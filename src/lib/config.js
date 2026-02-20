@@ -1,7 +1,7 @@
-import { homedir } from 'os';
+import { homedir, hostname, userInfo, platform, arch } from 'os';
 import { join } from 'path';
-import { readFileSync, writeFileSync, mkdirSync, chmodSync, existsSync } from 'fs';
-import { nanoid } from 'nanoid';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
+import { createHash } from 'crypto';
 
 const API_URL = 'https://coinrotator.app/api/cli';
 const CONFIG_DIR = join(homedir(), '.shumi');
@@ -30,12 +30,23 @@ function writeConfig(config) {
   writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2), { mode: 0o600 });
 }
 
+/**
+ * Derive a deterministic device ID from stable machine properties.
+ * Survives config deletion — same machine always produces the same ID.
+ */
+function getMachineFingerprint() {
+  const data = [
+    hostname(),
+    userInfo().username,
+    platform(),
+    arch(),
+    homedir(),
+  ].join('|');
+  return createHash('sha256').update(data).digest('hex').slice(0, 24);
+}
+
 export function getDeviceId() {
-  const config = readConfig();
-  if (config.deviceId) return config.deviceId;
-  const deviceId = nanoid();
-  writeConfig({ ...config, deviceId });
-  return deviceId;
+  return getMachineFingerprint();
 }
 
 export function getToken() {

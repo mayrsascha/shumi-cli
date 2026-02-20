@@ -1,6 +1,6 @@
 import ora from 'ora';
 import { query } from './api-client.js';
-import { renderText, renderRaw, renderError } from './renderer.js';
+import { renderText, renderRaw } from './renderer.js';
 
 /**
  * Execute a Shumi query with spinner, error handling, and rendering.
@@ -20,8 +20,7 @@ export async function execute({ queryText, raw = false, archetype = 'base', comm
       renderText(result.text);
     }
   } catch (error) {
-    spinner.stop();
-    renderError(error);
+    spinner.fail(error.message);
     process.exitCode = 1;
   }
 }

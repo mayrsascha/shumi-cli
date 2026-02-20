@@ -1,10 +1,17 @@
 {
-  "name": "shumi-cli",
+  "name": "shumi",
   "version": "0.1.0",
   "description": "Shumi — crypto trade intelligence from your terminal",
   "type": "module",
   "bin": {
     "shumi": "./bin/shumi.js"
+  },
+  "files": [
+    "bin/",
+    "src/"
+  ],
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
     "start": "node bin/shumi.js",
@@ -19,9 +26,16 @@
   ],
   "author": "CoinRotator",
   "license": "MIT",
+  "homepage": "https://shumi.ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mayrsascha/shumi-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mayrsascha/shumi-cli/issues"
+  },
   "dependencies": {
     "chalk": "^5.3.0",
-    "cli-table3": "^0.6.5",
     "commander": "^12.1.0",
     "marked": "^15.0.0",
     "marked-terminal": "^7.2.1",
