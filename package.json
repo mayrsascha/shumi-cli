@@ -1,6 +1,6 @@
 {
   "name": "shumi",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shumi — crypto trade intelligence from your terminal",
   "type": "module",
   "bin": {
