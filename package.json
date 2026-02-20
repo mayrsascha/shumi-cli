@@ -1,0 +1,32 @@
+{
+  "name": "shumi-cli",
+  "version": "0.1.0",
+  "description": "Shumi — crypto trade intelligence from your terminal",
+  "type": "module",
+  "bin": {
+    "shumi": "./bin/shumi.js"
+  },
+  "scripts": {
+    "start": "node bin/shumi.js",
+    "dev": "node --watch bin/shumi.js"
+  },
+  "keywords": [
+    "crypto",
+    "trading",
+    "cli",
+    "shumi",
+    "coinrotator"
+  ],
+  "author": "CoinRotator",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0",
+    "marked": "^15.0.0",
+    "marked-terminal": "^7.2.1",
+    "nanoid": "^5.0.9",
+    "open": "^10.1.0",
+    "ora": "^8.1.1"
+  }
+}
