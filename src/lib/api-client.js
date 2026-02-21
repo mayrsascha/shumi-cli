@@ -61,6 +61,66 @@ export async function query({ messages, raw = false, archetype = 'base', command
   return response.json();
 }
 
+const KEYS_URL = API_URL.replace('/cli', '/keys');
+
+export async function createKey(name) {
+  const token = getToken();
+  if (!token) throw new ApiError(401, { error: 'Authentication required. Run: shumi login' });
+
+  const response = await fetch(KEYS_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name: name || 'Default' }),
+    signal: AbortSignal.timeout(15000),
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({ error: `Request failed: ${response.status}` }));
+    throw new ApiError(response.status, body);
+  }
+
+  return response.json();
+}
+
+export async function listKeys() {
+  const token = getToken();
+  if (!token) throw new ApiError(401, { error: 'Authentication required. Run: shumi login' });
+
+  const response = await fetch(KEYS_URL, {
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${token}` },
+    signal: AbortSignal.timeout(15000),
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({ error: `Request failed: ${response.status}` }));
+    throw new ApiError(response.status, body);
+  }
+
+  return response.json();
+}
+
+export async function revokeKey(prefix) {
+  const token = getToken();
+  if (!token) throw new ApiError(401, { error: 'Authentication required. Run: shumi login' });
+
+  const response = await fetch(`${KEYS_URL}?prefix=${encodeURIComponent(prefix)}`, {
+    method: 'DELETE',
+    headers: { 'Authorization': `Bearer ${token}` },
+    signal: AbortSignal.timeout(15000),
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({ error: `Request failed: ${response.status}` }));
+    throw new ApiError(response.status, body);
+  }
+
+  return response.json();
+}
+
 export async function healthCheck() {
   try {
     // Check if the CLI endpoint is reachable with a minimal request

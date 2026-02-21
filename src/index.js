@@ -11,6 +11,7 @@ import { registerTweetsCommand } from './commands/tweets.js';
 import { registerSearchCommand } from './commands/search.js';
 import { registerAuthCommands } from './commands/auth.js';
 import { registerHealthCommand } from './commands/health.js';
+import { registerKeysCommand } from './commands/keys.js';
 
 export function registerCommands(program) {
   registerAskCommand(program);
@@ -26,4 +27,5 @@ export function registerCommands(program) {
   registerSearchCommand(program);
   registerAuthCommands(program);
   registerHealthCommand(program);
+  registerKeysCommand(program);
 }

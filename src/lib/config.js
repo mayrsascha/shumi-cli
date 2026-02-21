@@ -50,6 +50,7 @@ export function getDeviceId() {
 }
 
 export function getToken() {
+  if (process.env.SHUMI_TOKEN) return process.env.SHUMI_TOKEN;
   const config = readConfig();
   if (!config.token) return null;
   if (config.expiresAt && new Date(config.expiresAt) < new Date()) {
@@ -59,7 +60,7 @@ export function getToken() {
 }
 
 export function getWalletAddress() {
-  return readConfig().walletAddress || null;
+  return process.env.SHUMI_WALLET || readConfig().walletAddress || null;
 }
 
 export function saveCredentials({ token, walletAddress, expiresAt }) {
